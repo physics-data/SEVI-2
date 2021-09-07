@@ -96,7 +96,7 @@
                 \multicolumn{1}{c|}{\textbf{说明}} & 
                 \multicolumn{1}{c}{\textbf{类型}} \\
                 \hline
-                SphereId & 球壳的编号，默认半径小的球壳在前 & '<i4' \\
+                SphereId & 球壳的编号，默认半径小的球壳在前 & '<u1' \\
                 R & 球壳半径 & '<f8' \\
                 b & 电子动量 $\theta$ 分布参数 & '<f8', (N) \\
                 \hline
@@ -124,6 +124,7 @@
                 \multicolumn{1}{c|}{\textbf{说明}} & 
                 \multicolumn{1}{c}{\textbf{类型}} \\
                 \hline
+                SphereId & 球壳的编号，与 Truth 表中的球壳编号对应 & '<u1' \\
                 ElectronId & 电子编号 & '<i4' \\
                 $r$ & 电子动量大小（与半径等价） & '<f8' \\
                 $\cos\theta$ & 电子动量极角余弦 & '<f8' \\
@@ -151,7 +152,6 @@
             \end{tabular}
         }
 \end{table}
-
 % subsection 训练数据格式 (end)
 
 % section 数据格式 (end)
