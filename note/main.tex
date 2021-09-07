@@ -52,6 +52,8 @@
 
 为了简单起见，设置 $j \in \{1,2\}$，即最终有两个电子球。你将获得与\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}输出一样的输入数据，即 50000 张图像，然后辨别电子的位置，并反推出电子动量分布。\textbf{提示：$f$ 并不是 $\theta$ 的概率密度函数}，你需要做一些解析推导，从 $f_j(\cos\theta) \sim U(-1,1)$ 中推算出有用的概率密度函数。
 
+因为本项大作业也不是助教的专业领域，所以出题时可能存在诸多不明晰的问题。有任何疑问，请在\href{https://github.com/physics-data/faq/discussions}{讨论区}发帖探讨。
+
 % section 总体要求 (end)
 
 \section{数据格式} % (fold)
@@ -243,8 +245,18 @@
 
 \section{黑盒评分函数} % (fold)
 \label{sec:黑盒评分函数}
-
-记测试数据实际使用的分布参数为 $b_{i,j}, j\in \{1,2\}$；提交的答案重建出的参数为 $\hat{b}_{i,j}$，则最终得分 $\displaystyle\sum_{j=1}^{2}\sum_{i=0}^{\infty} \left( \hat{b}_{i,j} - b_{i,j} \right)^2$。分数越低，排名越高。
-    
+记测试数据实际使用的分布参数为 $b_{i,j}, j\in \{1,2\}$；提交的答案重建出的参数为 $\hat{b}_{ij}$，则最终得分 $\displaystyle\sum_{j=1}^{2}\sum_{i=0}^{\infty} \left( \hat{b}_{ij} - b_{ij} \right)^2$。分数越低，排名越高。
 % section 黑盒评分函数 (end)
+
+\section{白盒分数} % (fold)
+\label{sec:白盒分数}
+与其它大作业一样，白盒部分占剩余的 20\%。分为 Git 使用（5\%）、代码风格（5\%）与实验报告（10\%）。在实验报告中，需要包含以下内容：
+\begin{itemize}
+    \item 处理算法的核心思想（包括必要的数学推导、文献引用等）
+    \item 代码整体结构与思路
+    \item 遇到的问题及解决方法
+    \item 代码的运行方式（特别是使用了额外的软件包或者需要较复杂的配置时）
+\end{itemize}
+    
+% section 白盒分数 (end)
 \end{document}
