@@ -97,8 +97,8 @@
                 \multicolumn{1}{c}{\textbf{类型}} \\
                 \hline
                 SphereId & 球壳的编号，默认半径小的球壳在前 & '<u1' \\
-                R & 球壳半径 & '<f8' \\
-                b & 电子动量 $\theta$ 分布参数 & '<f8', (N) \\
+                $R$ & 球壳半径 & '<f8' \\
+                $b$ & 电子动量 $\theta$ 分布参数 & '<f8', (N) \\
                 \hline
             \end{tabular}
         }
@@ -111,10 +111,32 @@
 
 我们会提供了两类训练数据：第一类是完整进行\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}模拟的，包含电子动量初始信息、电子打击在 MCP 上的位置、荧光屏上的图像。由于图像占用空间较大，这类数据的数据量有限，因此设置了第二类数据集。第二类数据集会给出不同的 $R_j$、$\sigma_{R_j}$ 以及 $b_{ij}$ 参数，及其生成的电子动量 $(r,\theta)$、电子打在 MCP 的位置 $(x,z)$。
 
-第一类训练数据包含 个表格。“Truth” 表格记录着电子动量分布的表达式，格式与表 \ref{tab:Answer} 一致；“FinalImage” 包含最终生成的图像，与测试数据中的表 \ref{tab:FinalImage} 一致。此外还有“GeneratedElectrons” 与 “DetectedElectrons”：
+第一类训练数据包含 个表格。“Truth” 表格记录着电子动量分布的表达式，格式与表 \ref{tab:Answer} 相似：
 
 \begin{table}[H]
-    \caption{GeneratedElectrons 表格}
+    \caption{Truth 表格}
+        \label{tab:Truth}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                SphereId & 球壳的编号 & '<u1' \\
+                $R$ & 球壳半径 & '<f8' \\
+                $\sigma_R$ & 球壳半径展宽 & '<f8' \\
+                $b$ & 电子动量 $\theta$ 分布参数 & '<f8', (N)\tablefootnote{N 取决于具体数据} \\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+“FinalImage” 包含最终生成的图像，与测试数据中的表 \ref{tab:FinalImage} 一致。此外还有“GeneratedElectrons” 与 “DetectedElectrons”：
+
+\begin{table}[H]
+    \caption{ 表格}
         \label{tab:GeneratedElectrons}
         \centering
         {
@@ -152,12 +174,75 @@
             \end{tabular}
         }
 \end{table}
+
+而第二类训练数据不包含图像，但会包含多种电子动量分布参数。包含三个表格：
+
+\begin{table}[H]
+    \caption{DistributionParameters 表格}
+        \label{tab:DistributionParameters}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                DistributionId & 动量分布编号（其实等价于球壳编号） & '<i4' \\
+                $R$ & 球壳半径 & '<f8' \\
+                $\sigma_R$ & 球壳半径展宽 & '<f8' \\
+                $b$ & 电子动量 $\theta$ 分布参数 & '<f8', (N)\\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+\begin{table}[H]
+    \caption{GeneratedElectrons 表格}
+        \label{tab:GeneratedElectrons2}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                DistributionId & 动量分布编号 & '<i4' \\
+                ElectronId & 电子编号 & '<i4' \\
+                $r$ & 电子动量大小（与半径等价） & '<f8' \\
+                $\cos\theta$ & 电子动量极角余弦 & '<f8' \\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+\begin{table}[H]
+    \caption{DetectedElectrons 表格}
+        \label{tab:DetectedElectrons2}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                ElectronId & 电子编号，与 GeneratedElectrons 中的电子编号对应 & '<i4' \\
+                $x$ & 电子在 MCP 平面上的横坐标 & '<f8' \\
+                $z$ & 电子在 MCP 平面上的纵坐标 & '<f8' \\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+
 % subsection 训练数据格式 (end)
 
 % section 数据格式 (end)
 
 \section{黑盒评分函数} % (fold)
 \label{sec:黑盒评分函数}
-
+    
 % section 黑盒评分函数 (end)
 \end{document}
