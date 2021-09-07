@@ -87,7 +87,7 @@
 
 \begin{table}[H]
     \caption{Answer 表格}
-        \label{tab:FinalImage}
+        \label{tab:Answer}
         \centering
         {
             \begin{tabular}[c]{l|l|l}
@@ -102,9 +102,57 @@
                 \hline
             \end{tabular}
         }
-    \end{table}
+\end{table}
 
 % subsection 测试数据与提交数据格式 (end)
+
+\subsection{训练数据格式} % (fold)
+\label{sub:训练数据格式}
+
+我们会提供了两类训练数据：第一类是完整进行\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}模拟的，包含电子动量初始信息、电子打击在 MCP 上的位置、荧光屏上的图像。由于图像占用空间较大，这类数据的数据量有限，因此设置了第二类数据集。第二类数据集会给出不同的 $R_j$、$\sigma_{R_j}$ 以及 $b_{ij}$ 参数，及其生成的电子动量 $(r,\theta)$、电子打在 MCP 的位置 $(x,z)$。
+
+第一类训练数据包含 个表格。“Truth” 表格记录着电子动量分布的表达式，格式与表 \ref{tab:Answer} 一致；“FinalImage” 包含最终生成的图像，与测试数据中的表 \ref{tab:FinalImage} 一致。此外还有“GeneratedElectrons” 与 “DetectedElectrons”：
+
+\begin{table}[H]
+    \caption{GeneratedElectrons 表格}
+        \label{tab:GeneratedElectrons}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                ElectronId & 电子编号 & '<i4' \\
+                $r$ & 电子动量大小（与半径等价） & '<f8' \\
+                $\cos\theta$ & 电子动量极角余弦 & '<f8' \\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+\begin{table}[H]
+    \caption{DetectedElectrons 表格}
+        \label{tab:DetectedElectrons}
+        \centering
+        {
+            \begin{tabular}[c]{l|l|l}
+                \hline
+                \multicolumn{1}{c|}{\textbf{名称}} & 
+                \multicolumn{1}{c|}{\textbf{说明}} & 
+                \multicolumn{1}{c}{\textbf{类型}} \\
+                \hline
+                ImageId & 图像编号，与 FinalImage 表中的图像编号对应 & '<i4' \\
+                ElectronId & 电子编号，与 GeneratedElectrons 中的电子编号对应 & '<i4' \\
+                $x$ & 被 MCP 倍增的电子在 MCP 平面上的横坐标 & '<f8' \\
+                $z$ & 被 MCP 倍增的电子在 MCP 平面上的纵坐标 & '<f8' \\
+                \hline
+            \end{tabular}
+        }
+\end{table}
+
+% subsection 训练数据格式 (end)
 
 % section 数据格式 (end)
 
