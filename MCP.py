@@ -1,6 +1,5 @@
 import h5py
 import numpy as np
-from time import time
 
 with h5py.File("test.h5", "r") as ipt:
     DetectedElectrons = ipt["DetectedElectrons"][()]
@@ -15,9 +14,6 @@ A = np.clip(A, a_min=0, a_max=None)
 σ = np.clip(σ, a_min=0, a_max=None)
 ρ = np.random.normal(0, 0.1, Nele_this)
 ρ = np.clip(ρ, a_min=-1, a_max=1)
-# print(A)
-# print(σ)
-print(ρ)
 
 
 def ElectronSpot(x, y, A, σ, ρ) :
@@ -29,7 +25,6 @@ Xgrid = np.linspace(-1, 1, size + 1)
 Zgrid = Xgrid
 Finess = 5
 FineGrids = np.linspace(-1, 1, size * Finess + 1)
-start = time()
 # when distance between screen and electron > rmax, light must be 0
 rmaxs = np.sqrt(2 * np.log(A)) * σ
 print(rmaxs)
@@ -56,11 +51,8 @@ Intensity = np.concatenate(Intensity)
 Xfinegrids = np.concatenate(Xfinegrids)
 Zfinegrids = np.concatenate(Zfinegrids)
 theImage = np.histogram2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)[0] / Finess ** 2
-theImage += np.random.normal(0, 10, (size, size))
-print(time() - start)
-print(A.max())
-print(theImage.max())
-theIm = np.round(theImage).astype(np.uint8)
+theImage += np.random.normal(20, 20, (size, size))
+theImage = np.clip(np.round(theImage), a_min=0, a_max=255).astype(np.uint8)
 from matplotlib import pyplot as plt
 plt.imshow(theImage)
 # plt.hist2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)
