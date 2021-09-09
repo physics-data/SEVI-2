@@ -68,22 +68,18 @@ Image_dt = np.dtype([("ImageId", np.int32), ("Image", np.uint8, (size, size))])
 flush_num = 20
 ImageGroup = eleDF.groupby("ImageId")
 with h5py.File("testMCP.h5", "w") as opt :
-    opt.create_dataset("FinalImage", shape=73, dtype=Image_dt)
+    opt.create_dataset("FinalImage", shape=33, dtype=Image_dt)
     counter = 0
     batch_counter = 0
-    FinalImages = np.empty(100, dtype=Image_dt)
+    FinalImages = np.empty(flush_num, dtype=Image_dt)
     for ImageId, ThisImageElec in ImageGroup :
         if counter == flush_num :
             opt["FinalImage"][batch_counter * flush_num:batch_counter * flush_num + counter] = FinalImages  # flush data to disk
             counter = 0
             batch_counter += 1
-        FinalImages["Image"][counter] = GenerateOneImage(ThisImageElec["x"].values, ThisImageElec["z"].values, ThisImageElec["A"].values, ThisImageElec["ρ"].values, ThisImageElec["ρ"].values)
-        print("ImageId={}".format(ImageId))
+        FinalImages["Image"][counter] = GenerateOneImage(ThisImageElec["x"].values, ThisImageElec["z"].values, ThisImageElec["A"].values, ThisImageElec["σ"].values, ThisImageElec["ρ"].values)
+        print("ImageId={0}, counter={1}, batch_counter={2}".format(ImageId, counter, batch_counter))
         FinalImages["ImageId"][counter] = ImageId
-        if batch_counter == 3 and counter == 13 : break
-    opt["FinalImage"][batch_counter * flush_num:batch_counter * flush_num + counter] = FinalImages  # flush data to disk
-
-# from matplotlib import pyplot as plt
-# plt.imshow(theImage)
-# plt.hist2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)
-# plt.show()
+        counter += 1
+        if batch_counter == 1 and counter == 13 : break
+    opt["FinalImage"][batch_counter * flush_num:batch_counter * flush_num + counter] = FinalImages[:counter]  # flush data to disk
