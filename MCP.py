@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+from time import time
 
 with h5py.File("test.h5", "r") as ipt:
     DetectedElectrons = ipt["DetectedElectrons"][()]
@@ -10,7 +11,7 @@ Nele_this = len(DetectedElectrons)
 
 A = np.random.normal(100, 10, Nele_this)
 A = np.clip(A, a_min=0, a_max=None)
-σ = np.random.normal(1e-2, 1e-3, Nele_this)
+σ = np.random.normal(1.5e-2, 1e-3, Nele_this)
 σ = np.clip(σ, a_min=0, a_max=None)
 ρ = np.random.normal(0, 0.1, Nele_this)
 ρ = np.clip(ρ, a_min=-1, a_max=1)
@@ -23,20 +24,22 @@ def ElectronSpot(x, y, A, σ, ρ) :
     return A * np.exp(-(x ** 2 + y ** 2 + 2 * ρ * x * y) / (2 * σ ** 2))
 
 
-Xgrid = np.linspace(-1, 1, 1024 + 1)
+size = 1024
+Xgrid = np.linspace(-1, 1, size + 1)
 Zgrid = Xgrid
-FineGrids = np.linspace(-1, 1, 1024 * 5 + 1)
-grid_area = (Xgrid[1] - Xgrid[0]) * (Zgrid[1] - Zgrid[0])
+Finess = 5
+FineGrids = np.linspace(-1, 1, size * Finess + 1)
+start = time()
 # when distance between screen and electron > rmax, light must be 0
 rmaxs = np.sqrt(2 * np.log(A)) * σ
 print(rmaxs)
 x0s = DetectedElectrons["x"]
 z0s = DetectedElectrons["z"]
 # A rectengular zone for calculation
-xmins = (np.digitize(x0s - rmaxs, Xgrid, right=False) - 1) * 5
-xmaxs = (np.digitize(x0s + rmaxs, Xgrid, right=True)) * 5
-zmins = (np.digitize(z0s - rmaxs, Zgrid, right=False) - 1) * 5
-zmaxs = (np.digitize(z0s + rmaxs, Zgrid, right=True)) * 5
+xmins = (np.digitize(x0s - rmaxs, Xgrid, right=False) - 1) * Finess
+xmaxs = (np.digitize(x0s + rmaxs, Xgrid, right=True)) * Finess
+zmins = (np.digitize(z0s - rmaxs, Zgrid, right=False) - 1) * Finess
+zmaxs = (np.digitize(z0s + rmaxs, Zgrid, right=True)) * Finess
 
 Intensity = []
 Xfinegrids = []
@@ -52,6 +55,13 @@ for i in range(len(x0s)) :
 Intensity = np.concatenate(Intensity)
 Xfinegrids = np.concatenate(Xfinegrids)
 Zfinegrids = np.concatenate(Zfinegrids)
+theImage = np.histogram2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)[0] / Finess ** 2
+theImage += np.random.normal(0, 10, (size, size))
+print(time() - start)
+print(A.max())
+print(theImage.max())
+theIm = np.round(theImage).astype(np.uint8)
 from matplotlib import pyplot as plt
-plt.hist2d(Xfinegrids, Zfinegrids, bins=1024, range=[[-1, 1], [-1, 1]], weights=Intensity)
+plt.imshow(theImage)
+# plt.hist2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)
 plt.show()
