@@ -68,7 +68,6 @@ def GenerateOneImage(x0s, z0s, A, σ, ρ) :
     Xfinegrids = np.concatenate(Xfinegrids)
     Zfinegrids = np.concatenate(Zfinegrids)
     theImage = np.histogram2d(Xfinegrids, Zfinegrids, bins=size, range=[[-1, 1], [-1, 1]], weights=Intensity)[0] / Finess ** 2
-    theImage += np.random.normal(20, 20, (size, size))
     theImage = np.clip(np.round(theImage), a_min=0, a_max=255).astype(np.uint8)
     return theImage
 
