@@ -78,11 +78,11 @@ Image_dt = np.dtype([("ImageId", np.int32), ("Image", np.uint8, (size, size))])
 flush_num = 100
 ImageGroup = eleDF.groupby("ImageId")
 with h5py.File(args.opt, "w") as opt :
-    opt.create_dataset("FinalImage", shape=(Nimage_out,), dtype=Image_dt)
+    opt.create_dataset("FinalImage", shape=(Nimage_out,), dtype=Image_dt, compression='gzip', compression_opts=9)
     if args.withtruth :
         with h5py.File(args.ipt, "r") as ipt :
             for keyname in list(ipt.keys()) :
-                opt.create_dataset(keyname, data=ipt[keyname])
+                opt.create_dataset(keyname, data=ipt[keyname], compression='gzip', compression_opts=9)
 
     counter = 0
     batch_counter = 0
