@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8x]{inputenc}
-\usepackage{ctex,titletoc,array,graphicx,float,subfigure,booktabs,multirow,colortbl,geometry,pgffor,indentfirst,physics,tikz,extarrows,tablefootnote}
+\usepackage{ctex,titletoc,array,graphicx,float,subfigure,booktabs,multirow,colortbl,geometry,pgffor,indentfirst,physics,tikz,extarrows,tablefootnote,ulem}
 \usepackage{cite}
 \usepackage[]{hyperref} 
 \usepackage{amsmath}
@@ -261,4 +261,25 @@
 \end{itemize}
     
 % section 白盒分数 (end)
+
+\section{关于数据生成} % (fold)
+\label{sec:关于数据生成}
+
+有关如何生成随机的 $R$，$\sigma_R$ 与 $\beta$ 的内容，因有泄题风险，暂不公布。
+
+有关给定分布参数后如何采样出 $\cos\theta$ 与 $r$ 并计算出 $x$ 与 $z$，因为 \sout{和生成 $\beta$ 的代码写在一起} 比较简单，所以暂不公布。
+
+可以公布的是生成图像的代码 MCP.py。代码思路如下
+
+\begin{enumerate}
+    \item 读入上一步输出的电子信息 ImageId、$x$、$z$，并按 ImageId 组合；
+    \item 采用第一阶段的 level2 的高斯亮斑 $I(x,z) \displaystyle A\exp [-\frac{1}{2}\frac{(x-x_0)^2+(z-z_0)^2+2\rho (x-x_0)(z-z_0)}{\sigma^2}]$，其中 $A \sim N(\mu=100, \sigma^2=100), A\geqslant 0$， 对于高斯采样得到的 $A<0$，将 A 置0；$\sigma \sim N(\mu=0.015, \sigma^2=10^{-6}), \sigma \geqslant 0$，$\rho \sim N(\mu=0, \sigma^2=0.01), \rho \in [-1,1]$
+    \item 对于每个电子，计算光斑最大半径 $r_\mathrm{max} = \sigma\sqrt{2\ln A}$，然后选取 $[x_0 - r_\mathrm{max}, x_0 + r_\mathrm{max}] \otimes [z_0 - r_\mathrm{max}, z_0 + r_\mathrm{max}]$ 作为计算区域，并将区域对齐到像素点边缘。
+    \item 对于每个待计算像素点，进一步细分为 $5\times 5$ 个格点，每个格点计算 $I(x,z)$
+    \item 对于一张图中的所有电子，计算全部格点值后，将其叠加（利用 np.histogram 功能）并除以 $5^2$（等效于数值求解像素点的亮度均值）
+\end{enumerate}
+
+\sout{因为助教也是赶 ddl 现写的，}可能有一些 bug （比如划分格点那块，但由于边缘格点数值较小应该没有太大影响），且代码风格非常粗糙，不过这是真正生成测试与训练数据的代码，我还是呈现原始版本了。
+
+% section 关于数据生成 (end)
 \end{document}
