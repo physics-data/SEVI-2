@@ -48,7 +48,7 @@
 
 \section{总体要求} % (fold)
 \label{sec:总体要求}
-我们会使用\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}的方法模拟实验数据，但模拟的设置会略有差异。电子的速度场将更为复杂。首先，由于存在多种电离能，最终发射的电子球速度有多个值，意味着成像时有多个电子球壳。对于第 j 层级的电子，$r \sim N(R_j, \sigma_{R_j}^2)$，而 $\displaystyle\theta \sim I_j(\theta) = \frac{1}{2} + \sum_{i=0}^{\infty}\beta_{2i} P_{2i}(\cos\theta)$\footnote{$P_l$ 是 $l$ 阶勒让德函数。注意，勒让德函数正交归一条件为 $\displaystyle\langle P_l | P_n \rangle = \int_{-1}^{1} P_l(x)P_n(x)\dd x = \delta_{ln} \frac{2}{2l+1}$}，你的任务是尽可能精准重建出各向异性参数 $\beta_{ij}$；$R_j$ 与 $\sigma_{R_j}$ 也是未知的，精准重建这些值也是重要的（不然 $\beta_{ij}$ 也会不准），不过不纳入最终评分指标。
+我们会使用\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}的方法模拟实验数据，但模拟的设置会略有差异。电子的速度场将更为复杂。首先，由于存在多种电离能，最终发射的电子球速度有多个值，意味着成像时有多个电子球壳。对于第 j 层级的电子，$r \sim N(R_j, \sigma_{R_j}^2)$，而 $\displaystyle\cos\theta \sim I_j(\cos\theta) = \frac{1}{2} + \sum_{i=1}^{\infty}\beta_{2i} P_{2i}(\cos\theta)$\footnote{$P_l$ 是 $l$ 阶勒让德函数。注意，勒让德函数正交归一条件为 $\displaystyle\langle P_l | P_n \rangle = \int_{-1}^{1} P_l(x)P_n(x)\dd x = \delta_{ln} \frac{2}{2l+1}$}，你的任务是尽可能精准重建出各向异性参数 $\beta_{ij}$；$R_j$ 与 $\sigma_{R_j}$ 也是未知的，精准重建这些值也是重要的（不然 $\beta_{ij}$ 也会不准），不过不纳入最终评分指标。
 
 为了简单起见，设置 $j \in \{1,2\}$，即最终有两个电子球。你将获得与\href{https://github.com/physics-data/tpl_SEVI}{第一阶段}输出一样的输入数据，即 50000 张图像，然后辨别电子的位置，并反推出电子动量分布。
 
@@ -102,7 +102,7 @@
                 \hline
                 SphereId & 球壳的编号，默认半径小的球壳在前 & '<u1' \\
                 $R$ & 球壳半径 & '<f8' \\
-                beta& 电子动量 $\theta$ 分布各向异性参数 & '<f8', (N) \\
+                beta& 电子动量 $\theta$ 分布各向异性参数，从 $i=1$ 开始 & '<f8', (N) \\
                 \hline
             \end{tabular}
         }
